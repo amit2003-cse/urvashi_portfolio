@@ -1,12 +1,24 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { projects } from "@/data/projects";
-import { motion } from "framer-motion";
-import { Download, ExternalLink, Mail, Terminal, BarChart3, Binary, Cpu } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Download, ExternalLink, Mail, Terminal, BarChart3, Binary, Cpu, Menu, X } from "lucide-react";
 
 export default function Home() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const navLinks = [
+    { name: "About", href: "#about" },
+    { name: "Skills", href: "#skills" },
+    { name: "Projects", href: "#projects" },
+    { name: "Contact", href: "#contact" },
+  ];
+
+  const resumeLink = "https://drive.google.com/file/d/1dYMSb5ws3INRbwpH2gm6ZnoU5WjgCz0O/view?usp=drivesdk";
+
   return (
     <main className="flex-1 w-full flex flex-col items-center bg-[#0a0a0b]">
       {/* Navbar */}
@@ -15,24 +27,68 @@ export default function Home() {
           <Link href="#home" className="text-xl font-bold font-outfit text-white">
             Urvashi Pal<span className="text-primary">.</span>
           </Link>
+          
+          {/* Desktop Nav */}
           <div className="hidden md:flex gap-8 items-center text-sm font-medium text-gray-300">
-            <Link href="#about" className="hover:text-white transition-colors">About</Link>
-            <Link href="#skills" className="hover:text-white transition-colors">Skills</Link>
-            <Link href="#projects" className="hover:text-white transition-colors">Projects</Link>
-            <Link href="#contact" className="hover:text-white transition-colors">Contact</Link>
+            {navLinks.map((link) => (
+              <Link key={link.name} href={link.href} className="hover:text-white transition-colors">
+                {link.name}
+              </Link>
+            ))}
             <Link 
-              href="/resume.pdf" 
+              href={resumeLink} 
               target="_blank"
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-white transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-white transition-all text-sm"
             >
               <Download size={14} /> Resume
             </Link>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button 
+            className="md:hidden text-gray-300 hover:text-white p-2"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-[#0d0d0f] border-b border-gray-800 overflow-hidden"
+            >
+              <div className="flex flex-col p-6 gap-6">
+                {navLinks.map((link) => (
+                  <Link 
+                    key={link.name} 
+                    href={link.href} 
+                    className="text-gray-300 hover:text-white text-lg font-medium"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+                <Link 
+                  href={resumeLink} 
+                  target="_blank"
+                  className="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-primary text-white font-bold transition-all shadow-lg"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Download size={18} /> Download Resume
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="w-full min-h-screen flex items-center justify-center pt-20 px-6 relative overflow-hidden">
+      <section id="home" className="w-full min-h-[90vh] md:min-h-screen flex items-center justify-center pt-24 md:pt-20 px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
         <div className="max-w-4xl mx-auto text-center z-10">
           <motion.div 
@@ -40,21 +96,21 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-6">
+            <div className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs md:text-sm font-medium mb-6">
               Data Analyst & Scientist
             </div>
-            <h1 className="text-5xl md:text-8xl font-bold font-outfit mb-6 tracking-tight text-white leading-[1.1]">
+            <h1 className="text-4xl sm:text-5xl md:text-8xl font-bold font-outfit mb-6 tracking-tight text-white leading-[1.1]">
               Turning Data into <br className="hidden md:block"/>
               <span className="text-gradient">Strategic Assets</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed px-4 md:px-0">
               Specializing in End-to-End Data Engineering, SQL Analytics, and Power BI Storytelling to drive multi-million dollar business decisions.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="#projects" className="px-8 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-blue-600 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link href="#projects" className="w-full sm:w-auto px-8 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-blue-600 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] text-center">
                 Explore Projects
               </Link>
-              <Link href="#contact" className="px-8 py-3 rounded-xl border border-gray-700 bg-gray-800/50 text-white font-semibold hover:bg-gray-800 transition-all">
+              <Link href="#contact" className="w-full sm:w-auto px-8 py-3 rounded-xl border border-gray-700 bg-gray-800/50 text-white font-semibold hover:bg-gray-800 transition-all text-center">
                 Get in Touch
               </Link>
             </div>
@@ -63,14 +119,14 @@ export default function Home() {
       </section>
 
       {/* Technical Toolbox (New Section) */}
-      <section id="skills" className="w-full py-24 px-6 border-y border-gray-800/50">
+      <section id="skills" className="w-full py-16 md:py-24 px-6 border-y border-gray-800/50">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Technical <span className="text-gradient">Toolbox</span></h2>
             <p className="text-gray-400">Advanced stack for data-driven transformation</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-8 glass-card rounded-2xl group hover:border-primary/30 transition-all">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="p-8 glass-card rounded-2xl group hover:border-primary/30 transition-all border border-white/5">
               <Terminal className="text-primary mb-6" size={32} />
               <h3 className="text-xl font-bold text-white mb-4">Data Engineering</h3>
               <ul className="space-y-2 text-gray-400 text-sm">
@@ -80,7 +136,7 @@ export default function Home() {
                 <li>• API Integration</li>
               </ul>
             </div>
-            <div className="p-8 glass-card rounded-2xl group hover:border-primary/30 transition-all">
+            <div className="p-8 glass-card rounded-2xl group hover:border-primary/30 transition-all border border-white/5">
               <Binary className="text-primary mb-6" size={32} />
               <h3 className="text-xl font-bold text-white mb-4">Database & SQL</h3>
               <ul className="space-y-2 text-gray-400 text-sm">
@@ -90,7 +146,7 @@ export default function Home() {
                 <li>• Query Optimization</li>
               </ul>
             </div>
-            <div className="p-8 glass-card rounded-2xl group hover:border-primary/30 transition-all">
+            <div className="p-8 glass-card rounded-2xl group hover:border-primary/30 transition-all border border-white/5">
               <BarChart3 className="text-primary mb-6" size={32} />
               <h3 className="text-xl font-bold text-white mb-4">Business Intelligence</h3>
               <ul className="space-y-2 text-gray-400 text-sm">
@@ -105,10 +161,9 @@ export default function Home() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="w-full py-32 px-6 bg-[#0f0f11]">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold font-outfit mb-2 text-center text-white">Featured Impact</h2>
-          <p className="text-gray-500 text-center mb-20">Quantifiable results through technical excellence</p>
+      <section id="projects" className="w-full py-24 md:py-32 px-6 bg-[#0f0f11]">
+        <div className="max-w-6xl mx-auto">          <h2 className="text-3xl md:text-5xl font-bold font-outfit mb-2 text-center text-white">Featured Impact</h2>
+          <p className="text-gray-500 text-center mb-16 md:mb-20">Quantifiable results through technical excellence</p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {projects.map((project, index) => (
