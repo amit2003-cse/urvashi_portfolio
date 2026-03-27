@@ -74,12 +74,12 @@ This project isn't just a website; it's a demonstration of **full-stack excellen
 
 ## 🤝 Contact
 
-Developed by **[Your Name]**  
+Developed by **Amit Kumar**  
 *Available for full-stack, frontend, and UI architecture roles.*
 
-- **LinkedIn:** [Your LinkedIn Link]
-- **GitHub:** [Your GitHub Link]
-- **Portfolio:** [Your Site Link]
+- **LinkedIn:** [Amit Kumar](https://www.linkedin.com/in/amit-cse/)
+- **GitHub:** [amit2003-cse](https://github.com/amit2003-cse)
+- **Email:** [amit4321sg@gmail.com](mailto:amit4321sg@gmail.com)
 
 ---
 
